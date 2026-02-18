@@ -1,7 +1,5 @@
 import os
 import requests
-import asyncio
-from flask import Flask, request
 from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import (
     Application,
@@ -17,12 +15,6 @@ FORM_URL = os.environ.get("FORM_URL")
 
 OBJECT, AMOUNT, CATEGORY = range(3)
 
-app_flask = Flask(__name__)
-
-telegram_app = Application.builder().token(TOKEN).build()
-
-
-# ---------- TELEGRAM HANDLERS ----------
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
@@ -84,29 +76,15 @@ conv_handler = ConversationHandler(
     fallbacks=[],
 )
 
-telegram_app.add_handler(CommandHandler("start", start))
-telegram_app.add_handler(conv_handler)
-
-
-# ---------- WEBHOOK ----------
-
-@app_flask.route(f"/{TOKEN}", methods=["POST"])
-def webhook():
-    update = Update.de_json(request.get_json(force=True), telegram_app.bot)
-
-    async def process():
-        await telegram_app.initialize()
-        await telegram_app.process_update(update)
-
-    asyncio.run(process())
-
-    return "ok"
-
-
-@app_flask.route("/")
-def home():
-    return "Bot is running"
-
 
 if __name__ == "__main__":
-    app_flask.run(host="0.0.0.0", port=10000)
+    application = Application.builder().token(TOKEN).build()
+
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(conv_handler)
+
+    application.run_webhook(
+        listen="0.0.0.0",
+        port=10000,
+        webhook_url=f"https://remont-bot-opxk.onrender.com/{TOKEN}",
+    )
