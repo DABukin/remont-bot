@@ -86,9 +86,9 @@ telegram_app.add_handler(conv_handler)
 
 
 @app_flask.route(f"/{TOKEN}", methods=["POST"])
-async def webhook():
+def webhook():
     update = Update.de_json(request.get_json(force=True), telegram_app.bot)
-    await telegram_app.process_update(update)
+    telegram_app.process_update(update)
     return "ok"
 
 
