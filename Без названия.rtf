@@ -1,0 +1,163 @@
+{\rtf1\ansi\ansicpg1251\cocoartf2867
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 AppleColorEmoji;\f2\fnil\fcharset0 .AppleSystemUIFontMonospaced-Regular;
+}
+{\colortbl;\red255\green255\blue255;\red136\green185\blue102;}
+{\*\expandedcolortbl;;\cssrgb\c59608\c76471\c47451;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 import requests\
+from telegram import Update\
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes\
+\
+# 
+\f1 \uc0\u55357 \u56593 
+\f0  \uc0\u1042 \u1089 \u1090 \u1072 \u1074 \u1100  \u1089 \u1102 \u1076 \u1072  \u1089 \u1074 \u1086 \u1081  \u1090 \u1086 \u1082 \u1077 \u1085 \
+TOKEN = "8484654570:AAEa7osrKFy3kJsPCggNVH36SVdM-do6XPM"\
+\
+# Google Form URL\
+FORM_URL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSfOMLR-8krFnxhiQcbhvtXWG8c2uVB1YT2r6zoxAFohIgSxrQ/formResponse"\
+\
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):\
+    await update.message.reply_text(\
+        "\uc0\u1055 \u1088 \u1080 \u1074 \u1077 \u1090  
+\f1 \uc0\u55357 \u56395 
+\f0 \\n\uc0\u1053 \u1072 \u1087 \u1080 \u1096 \u1080  \u1082 \u1086 \u1084 \u1072 \u1085 \u1076 \u1091  /\u1088 \u1072 \u1089 \u1093 \u1086 \u1076  \u1095 \u1090 \u1086 \u1073 \u1099  \u1076 \u1086 \u1073 \u1072 \u1074 \u1080 \u1090 \u1100  \u1088 \u1072 \u1089 \u1093 \u1086 \u1076 ."\
+    )\
+\
+async def expense(update: Update, context: ContextTypes.DEFAULT_TYPE):\
+    data = \{\
+        "entry.756291279": "R-002",\
+        "entry.1422320460": "3",\
+        "entry.656508705": "2026-02-15",\
+        "entry.577364935": "2000",\
+        "entry.379656384": "\uc0\u1084 \u1072 \u1090 \u1077 \u1088 \u1080 \u1072 \u1083 \u1099 "\
+    \}\
+\
+    response = requests.post(FORM_URL, data=data)\
+\
+    if response.status_code in (200, 302):\
+        await update.message.reply_text("
+\f1 \uc0\u9989 
+\f0  \uc0\u1056 \u1072 \u1089 \u1093 \u1086 \u1076  \u1076 \u1086 \u1073 \u1072 \u1074 \u1083 \u1077 \u1085 !")\
+    else:\
+        await update.message.reply_text("
+\f1 \uc0\u10060 
+\f0  \uc0\u1054 \u1096 \u1080 \u1073 \u1082 \u1072  \u1087 \u1088 \u1080  \u1086 \u1090 \u1087 \u1088 \u1072 \u1074 \u1082 \u1077 .")\
+\
+app = ApplicationBuilder().token(TOKEN).build()\
+\
+app.add_handler(CommandHandler("start", start))\
+app.add_handler(CommandHandler("
+\f2\fs26 \cf2 expense
+\f0\fs24 \cf0 ", expense))\
+\
+app.run_polling()\
+\
+\
+\
+\
+\
+\
+22231232423424\
+import os\
+import requests\
+from flask import Flask, request\
+from telegram import Update, ReplyKeyboardMarkup\
+from telegram.ext import (\
+    Application,\
+    CommandHandler,\
+    MessageHandler,\
+    ConversationHandler,\
+    ContextTypes,\
+    filters,\
+)\
+\
+TOKEN = os.environ.get("B8484654570:AAEa7osrKFy3kJsPCggNVH36SVdM-do6XPM")\
+FORM_URL = os.environ.get("https://docs.google.com/forms/u/0/d/e/1FAIpQLSfOMLR-8krFnxhiQcbhvtXWG8c2uVB1YT2r6zoxAFohIgSxrQ/formResponse")\
+\
+OBJECT, AMOUNT, CATEGORY = range(3)\
+\
+app_flask = Flask(__name__)\
+\
+telegram_app = Application.builder().token(TOKEN).build()\
+\
+\
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):\
+    await update.message.reply_text(\
+        "\uc0\u1055 \u1088 \u1080 \u1074 \u1077 \u1090  \u55357 \u56395 \\n\u1053 \u1072 \u1087 \u1080 \u1096 \u1080  /expense \u1095 \u1090 \u1086 \u1073 \u1099  \u1076 \u1086 \u1073 \u1072 \u1074 \u1080 \u1090 \u1100  \u1088 \u1072 \u1089 \u1093 \u1086 \u1076 ."\
+    )\
+\
+\
+async def expense_start(update: Update, context: ContextTypes.DEFAULT_TYPE):\
+    await update.message.reply_text("\uc0\u1042 \u1074 \u1077 \u1076 \u1080 \u1090 \u1077  ID \u1086 \u1073 \u1098 \u1077 \u1082 \u1090 \u1072 :")\
+    return OBJECT\
+\
+\
+async def get_object(update: Update, context: ContextTypes.DEFAULT_TYPE):\
+    context.user_data["object_id"] = update.message.text\
+    await update.message.reply_text("\uc0\u1042 \u1074 \u1077 \u1076 \u1080 \u1090 \u1077  \u1089 \u1091 \u1084 \u1084 \u1091 :")\
+    return AMOUNT\
+\
+\
+async def get_amount(update: Update, context: ContextTypes.DEFAULT_TYPE):\
+    context.user_data["amount"] = update.message.text\
+\
+    keyboard = [["\uc0\u1084 \u1072 \u1090 \u1077 \u1088 \u1080 \u1072 \u1083 \u1099 "], ["\u1076 \u1086 \u1089 \u1090 \u1072 \u1074 \u1082 \u1072 "], ["\u1080 \u1085 \u1089 \u1090 \u1088 \u1091 \u1084 \u1077 \u1085 \u1090 "], ["\u1088 \u1072 \u1089 \u1093 \u1086 \u1076 \u1085 \u1080 \u1082 \u1080 "], ["\u1087 \u1088 \u1086 \u1095 \u1077 \u1077 "]]\
+    reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True)\
+\
+    await update.message.reply_text("\uc0\u1042 \u1099 \u1073 \u1077 \u1088 \u1080 \u1090 \u1077  \u1082 \u1072 \u1090 \u1077 \u1075 \u1086 \u1088 \u1080 \u1102 :", reply_markup=reply_markup)\
+    return CATEGORY\
+\
+\
+async def get_category(update: Update, context: ContextTypes.DEFAULT_TYPE):\
+    category = update.message.text\
+    object_id = context.user_data["object_id"]\
+    amount = context.user_data["amount"]\
+\
+    data = \{\
+        "entry.756291279": "AUTO",\
+        "entry.1422320460": object_id,\
+        "entry.656508705": "2026-02-15",\
+        "entry.577364935": amount,\
+        "entry.379656384": category\
+    \}\
+\
+    response = requests.post(FORM_URL, data=data)\
+\
+    if response.status_code in (200, 302):\
+        await update.message.reply_text("\uc0\u9989  \u1056 \u1072 \u1089 \u1093 \u1086 \u1076  \u1076 \u1086 \u1073 \u1072 \u1074 \u1083 \u1077 \u1085 !")\
+    else:\
+        await update.message.reply_text("\uc0\u10060  \u1054 \u1096 \u1080 \u1073 \u1082 \u1072  \u1087 \u1088 \u1080  \u1086 \u1090 \u1087 \u1088 \u1072 \u1074 \u1082 \u1077 .")\
+\
+    return ConversationHandler.END\
+\
+\
+conv_handler = ConversationHandler(\
+    entry_points=[CommandHandler("expense", expense_start)],\
+    states=\{\
+        OBJECT: [MessageHandler(filters.TEXT & ~filters.COMMAND, get_object)],\
+        AMOUNT: [MessageHandler(filters.TEXT & ~filters.COMMAND, get_amount)],\
+        CATEGORY: [MessageHandler(filters.TEXT & ~filters.COMMAND, get_category)],\
+    \},\
+    fallbacks=[],\
+)\
+\
+telegram_app.add_handler(CommandHandler("start", start))\
+telegram_app.add_handler(conv_handler)\
+\
+\
+@app_flask.route(f"/\{TOKEN\}", methods=["POST"])\
+async def webhook():\
+    update = Update.de_json(request.get_json(force=True), telegram_app.bot)\
+    await telegram_app.process_update(update)\
+    return "ok"\
+\
+\
+@app_flask.route("/")\
+def home():\
+    return "Bot is running"\
+\
+\
+if __name__ == "__main__":\
+    app_flask.run(host="0.0.0.0", port=10000)}
