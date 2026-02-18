@@ -11,8 +11,8 @@ from telegram.ext import (
     filters,
 )
 
-TOKEN = os.environ.get("B8484654570:AAEa7osrKFy3kJsPCggNVH36SVdM-do6XPM")
-FORM_URL = os.environ.get("https://docs.google.com/forms/u/0/d/e/1FAIpQLSfOMLR-8krFnxhiQcbhvtXWG8c2uVB1YT2r6zoxAFohIgSxrQ/formResponse")
+TOKEN = os.environ.get("BOT_TOKEN")
+FORM_URL = os.environ.get("FORM_URL")
 
 OBJECT, AMOUNT, CATEGORY = range(3)
 
