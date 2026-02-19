@@ -84,7 +84,8 @@ if __name__ == "__main__":
     application.add_handler(conv_handler)
 
     application.run_webhook(
-        listen="0.0.0.0",
-        port=10000,
-        webhook_url=f"https://remont-bot-opxk.onrender.com/{TOKEN}",
-    )
+    listen="0.0.0.0",
+    port=10000,
+    webhook_url=f"https://remont-bot-opxk.onrender.com/{TOKEN}",
+    url_path=TOKEN,
+)
